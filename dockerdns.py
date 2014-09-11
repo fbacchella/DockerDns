@@ -592,7 +592,7 @@ def main():
     config.domain = 'local'
     config.reverse = '169.254'
 
-    config.pid_file = '/var/run/dockerdns/dockerdns.pid'
+    config.pidfile = '/var/run/dockerdns/dockerdns.pid'
     config.docker_socket = '/var/run/docker.sock'
     config.docker_api = '1.13'
     config.powerdns_socket = '/var/run/dockerdns/dockerdns.socket'
@@ -602,7 +602,7 @@ def main():
     params = {
         'powerdns': ('user', 'group', 'socket'),
         'docker': ('socket', 'api'),
-        'main': ('domain', 'reverse'),
+        'main': ('domain', 'reverse', 'pidfile'),
     }
 
     if options.config is not None:
@@ -660,7 +660,7 @@ def main():
 
     if options.daemonize:
         watcher = Watchdog.Instance()
-        watcher.pidfile = config.pid_file
+        watcher.pidfile = config.pidfile
         watcher.create_daemon()
         log_to_syslog('dockerdns')
         watcher.add_file(config.powerdns_socket)
