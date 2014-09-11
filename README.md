@@ -2,6 +2,8 @@ This tool is used to provide a dynamic DNS for docker container.
 
 It's purpose is to run on a docker hosting server, and expect a https://www.powerdns.com to run.
 
+It's written and python and uses https://github.com/docker/docker-py.
+
 Each time a container is started, it updates is database, and powerdns must be configured to use it.
 
 One should add in /etc/pdns/pnds.conf:
