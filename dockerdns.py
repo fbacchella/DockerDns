@@ -22,6 +22,7 @@ import sys
 import logging
 import time
 from logging.handlers import SysLogHandler
+from requests.exceptions import ConnectionError
 
 import ConfigParser
 
@@ -671,11 +672,29 @@ def main():
     server = PowerDnsListener(server=power_dns, pdnsuid=pdns_uid, pdnsgid=pdns_gid, path=config.powerdns_socket)
     server.start()
 
-    docker = Docker(dns=dns, base_url='unix:/%s' % config.docker_socket, version=config.docker_api)
+    # define a sleep time for communication failure
+    failure_pause = 1
+    while True:
+        try:
+            docker = Docker(dns=dns, base_url='unix:/%s' % config.docker_socket, version=config.docker_api)
 
-    for (event, container) in docker.loop():
-        logging.debug("%s: %s " % (event, container))
+            for (event, container) in docker.loop():
+                logging.debug("%s: %s " % (event, container))
+            # reset sleep time
+            failure_pause = 1
+        except ValueError:
+            # socket closed, see https://github.com/docker/docker-py/pull/385
+            pass
+        except ConnectionError as e:
+            logging.error("communication failure with docker daemon: %s" % e)
+            time.sleep(failure_pause)
+            failure_pause *= 2
+        except Exception as e:
+            logging.error("unexpected error with docker: %s" % e)
 
 # no global name space pollution
-if __name__ == '__main__':
-    sys.exit(main())
+try:
+    if __name__ == '__main__':
+        sys.exit(main())
+except KeyboardInterrupt:
+    pass
