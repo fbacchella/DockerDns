@@ -11,7 +11,7 @@ One should add in /etc/pdns/pnds.conf:
     launch=...,remote
     recursor=8.8.8.9                 # a forwarder
     allow-recursion=169.254.0.0/16   # allow the containers to query
-    remote-connection-string=unix:path=/var/run/dockerdns/dockerdns.socket
+    remote-connection-string=unix:path=/var/run/dockerdns.socket
     
 
 It's configuration is given in a dockerdns.ini
@@ -19,12 +19,12 @@ It's configuration is given in a dockerdns.ini
     [main]
     domain = local    # domain for container
     reverse = 169.254 #<containers IP prefix>
-    pidfile = /var/run/dockerdns/dockerdns.pid
+    pidfile = /var/run/dockerdns.pid
     
     [powerdns]
     user = pnds
     group = pnds
-    socket = /var/run/dockerdns/dockerdns.socket
+    socket = /var/run/dockerdns.socket
     
     [docker]
     socket = /var/run/docker.sock

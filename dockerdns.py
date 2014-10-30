@@ -618,18 +618,6 @@ def main():
                 for option_key in options_keys:
                     if config_file.has_option(section, option_key):
                         setattr(config, "%s%s" % (section_prefix, option_key), config_file.get(section, option_key))
-        #if config_file.has_section('powerdns'):
-        #    for option in ('user', 'group', 'socket'):
-        #        if config_file.has_option('powerdns', option):
-        #            setattr(config, "powerdns_%s" % option, config_file.get('powerdns', option))
-        #if config_file.has_section('docker'):
-        #    for option in ('socket', 'api'):
-        #        if config_file.has_option('docker', option):
-        #            setattr(config, "docker_%s" % option, config_file.get('docker', option))
-        #if config_file.has_section('main'):
-        #    for option in ('domain', 'reverse'):
-        #        if config_file.has_option('main', option):
-        #            setattr(config, "key", config_file.get('main', option))
 
     # Merge the config with values from command line
     for (key, value) in vars(options).items():
